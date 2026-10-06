@@ -9,7 +9,7 @@
 <meta property="og:description" content="4 datas em outubro. Confirme sua presença até o dia 10!">
 <meta name="theme-color" content="#ECECEA">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F0441B'/><text x='16' y='23' font-family='Helvetica' font-size='20' font-weight='600' text-anchor='middle' fill='white'>F</text></svg>">
-<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("anim")</script>
+<script>document.documentElement.classList.add("anim")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
@@ -188,12 +188,14 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 /* ---------- overlays ---------- */
 .overlay{
   position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;
-  background:rgba(20,20,18,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   visibility:hidden;
 }
+/* o desfoque fica numa camada própria: no Safari, animar a opacidade de quem tem
+   backdrop-filter quebra o recorte arredondado dos filhos */
+.scrim{position:absolute;inset:0;background:rgba(20,20,18,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .overlay.open{visibility:visible}
 .panel{
-  width:100%;max-width:560px;background:var(--bg);
+  position:relative;width:100%;max-width:560px;background:var(--bg);
   border-radius:22px 22px 0 0;padding:10px 12px max(16px,env(safe-area-inset-bottom));
   max-height:92dvh;overflow:auto;overscroll-behavior:contain;
 }
@@ -353,6 +355,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 
 <!-- Intro -->
 <div class="overlay" id="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+  <div class="scrim"></div>
   <div class="panel">
     <div class="handle"></div>
     <div class="stag">
@@ -369,6 +372,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 
 <!-- Date sheet -->
 <div class="overlay" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="scrim"></div>
   <div class="panel">
     <div class="handle"></div>
     <div class="stag" id="sheetBody">
@@ -417,7 +421,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="gsap.min.js"></script>
 <script>
 /* ===== Config — edite aqui ===== */
 const CONFIG = {
@@ -463,8 +467,11 @@ DATAS.forEach((d, i) => {
 
 /* ---- motion (GSAP) ---- */
 const G = window.gsap;
-const MOTION = !!G && document.documentElement.classList.contains("anim");
+const MOTION = !!G;
 if (!MOTION) document.documentElement.classList.remove("anim");
+// Com "Reduzir movimento" ligado, mantém os fades e desfoques, mas sem deslocar nada
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const m = o => { if (RM) ["x","y","yPercent","rotation","scale"].forEach(k => delete o[k]); return o };
 const isWide = () => matchMedia("(min-width:640px)").matches;
 const shown = el => el.offsetParent !== null;
 
@@ -490,7 +497,7 @@ function split(el, chars){
 function textIn(el, o = {}){
   if (!MOTION || !el) return G ? G.timeline() : null;
   return G.fromTo(split(el, o.chars),
-    { autoAlpha: 0, y: o.chars ? "0.45em" : "0.35em", filter: "blur(8px)" },
+    m({ autoAlpha: 0, y: o.chars ? "0.45em" : "0.35em", filter: "blur(8px)" }),
     { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: o.d || .9, ease: "power3.out",
       stagger: o.s || (o.chars ? .028 : .03), clearProps: "filter,transform" });
 }
@@ -505,13 +512,13 @@ function enterPage(){
   const tl = G.timeline();
   G.set("h1", { autoAlpha: 1 });
   tl.add(textIn($("h1"), { chars: true, d: 1.1, s: .03 }), 0)
-    .fromTo("#datas .sec-head", { autoAlpha: 0, y: 10, filter: "blur(6px)" }, { ...blurIn, duration: .8 }, .25)
+    .fromTo("#datas .sec-head", m({ autoAlpha: 0, y: 10, filter: "blur(6px)" }), { ...blurIn, duration: .8 }, .25)
     .fromTo(cards,
-      { autoAlpha: 0, x: i => from[i].x, y: i => from[i].y, rotation: i => from[i].r, scale: .86, filter: "blur(12px)", transition: "none" },
+      m({ autoAlpha: 0, x: i => from[i].x, y: i => from[i].y, rotation: i => from[i].r, scale: .86, filter: "blur(12px)", transition: "none" }),
       { ...blurIn, x: 0, rotation: 0, duration: 1.3, stagger: .09 }, .3)
-    .fromTo(cards.map(c => c.querySelector(".card-big")), { autoAlpha: 0, y: 26 },
+    .fromTo(cards.map(c => c.querySelector(".card-big")), m({ autoAlpha: 0, y: 26 }),
       { autoAlpha: 1, y: 0, duration: 1.1, stagger: .09, ease: "expo.out", clearProps: "transform" }, .55)
-    .fromTo("#dock", { autoAlpha: 0, y: 70, scale: .9 },
+    .fromTo("#dock", m({ autoAlpha: 0, y: 70, scale: .9 }),
       { autoAlpha: 1, y: 0, scale: 1, duration: 1, ease: "back.out(1.5)", clearProps: "transform" }, .85);
 }
 
@@ -521,38 +528,38 @@ function open(el){
   lastFocus = document.activeElement; openOverlay = el;
   el.classList.add("open"); document.body.classList.add("locked");
   if (!MOTION) return;
-  const panel = el.querySelector(".panel");
+  const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const kids = [...el.querySelectorAll(".stag > *, .done.show > *")].filter(shown);
-  G.killTweensOf([el, panel, ...kids]);
+  G.killTweensOf([scrim, panel, ...kids]);
   const tl = G.timeline();
-  tl.fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: .45, ease: "power2.out" })
+  tl.fromTo(scrim, { autoAlpha: 0 }, { autoAlpha: 1, duration: .45, ease: "power2.out" })
     .fromTo(panel,
-      isWide() ? { y: 50, scale: .94, autoAlpha: 0, filter: "blur(10px)" } : { yPercent: 100 },
-      isWide() ? { ...blurIn, duration: .9 } : { yPercent: 0, duration: .85, ease: "expo.out" }, .05)
-    .fromTo(kids, { autoAlpha: 0, y: 18, filter: "blur(6px)", transition: "none" },
+      RM ? { autoAlpha: 0 } : isWide() ? { y: 50, scale: .94, autoAlpha: 0, filter: "blur(10px)" } : { yPercent: 100 },
+      RM ? { autoAlpha: 1, duration: .5 } : isWide() ? { ...blurIn, duration: .9 } : { yPercent: 0, duration: .85, ease: "expo.out" }, .05)
+    .fromTo(kids, m({ autoAlpha: 0, y: 18, filter: "blur(6px)", transition: "none" }),
       { ...blurIn, duration: .75, stagger: .06, ease: "power3.out" }, .15);
   const h = [...el.querySelectorAll("h2, h3")].find(shown);
   if (h) tl.add(textIn(h, { s: .045 }), .25);
 }
 function close(el, cb){
   openOverlay = null;
-  const panel = el.querySelector(".panel");
+  const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const done = () => {
     el.classList.remove("open"); document.body.classList.remove("locked");
-    if (G) G.set([el, panel], { clearProps: "all" });
+    if (G) G.set([scrim, panel], { clearProps: "all" });
     if (lastFocus) lastFocus.focus({ preventScroll: true });
     if (cb) cb();
   };
   if (!MOTION) return done();
-  G.killTweensOf([el, panel]);
+  G.killTweensOf([scrim, panel]);
   G.timeline({ onComplete: done })
-    .to(panel, isWide()
+    .to(panel, RM ? { autoAlpha: 0, duration: .3 } : isWide()
       ? { y: 30, scale: .96, autoAlpha: 0, filter: "blur(8px)", duration: .4, ease: "power3.in" }
       : { yPercent: 100, duration: .5, ease: "power3.in" })
-    .to(el, { autoAlpha: 0, duration: .35, ease: "power2.in" }, isWide() ? .1 : .2);
+    .to(scrim, { autoAlpha: 0, duration: .35, ease: "power2.in" }, isWide() ? .1 : .2);
 }
 document.querySelectorAll(".overlay").forEach(o => {
-  o.addEventListener("click", e => { if (e.target === o) dismiss(o) });
+  o.querySelector(".scrim").addEventListener("click", () => dismiss(o));
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && openOverlay) dismiss(openOverlay) });
 function dismiss(o){ o.id === "intro" ? startApp() : close(o) }
@@ -672,20 +679,20 @@ function showDone(c, celebrate){
   const swap = () => { body.style.display = "none"; d.classList.remove("show"); void d.offsetWidth; d.classList.add("show") };
   if (!MOTION || !celebrate){ swap(); if (celebrate) burst(); return }
   const h0 = panel.offsetHeight;
-  G.to([...body.children], { autoAlpha: 0, y: -12, filter: "blur(8px)", duration: .32, stagger: .03, ease: "power2.in", onComplete(){
+  G.to([...body.children], { autoAlpha: 0, y: RM ? 0 : -12, filter: "blur(8px)", duration: .32, stagger: .03, ease: "power2.in", onComplete(){
     swap(); G.set([...body.children], { clearProps: "all" });
     const h1 = panel.offsetHeight;
     G.timeline()
       .fromTo(panel, { height: h0 }, { height: h1, duration: .65, ease: "expo.out", clearProps: "height" })
-      .fromTo([...d.children], { autoAlpha: 0, y: 24, filter: "blur(8px)", transition: "none" },
+      .fromTo([...d.children], m({ autoAlpha: 0, y: 24, filter: "blur(8px)", transition: "none" }),
         { ...blurIn, duration: .8, stagger: .08, ease: "power3.out" }, .05)
-      .fromTo(".check", { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 1, ease: "elastic.out(1,.55)", clearProps: "transform" }, .1)
+      .fromTo(".check", RM ? { autoAlpha: 0 } : { scale: 0, rotation: -40 }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 1, ease: RM ? "power2.out" : "elastic.out(1,.55)", clearProps: "transform" }, .1)
       .add(textIn($("#doneTitle"), { s: .05 }), .15)
       .call(burst, null, .3);
   }});
 }
 function burst(){
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (RM) return;
   const c = document.querySelector(".check").getBoundingClientRect();
   const cx = c.left + c.width/2, cy = c.top + c.height/2;
   const colors = ["#F0441B","#0E0E0E","#FF9466","#C9C9C5"];
@@ -706,7 +713,7 @@ const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
   io.unobserve(e.target);
   const tl = G.timeline();
-  tl.fromTo(e.target, { autoAlpha: 0, y: 36, scale: .97, filter: "blur(12px)" }, { ...blurIn, duration: 1.2 });
+  tl.fromTo(e.target, m({ autoAlpha: 0, y: 36, scale: .97, filter: "blur(12px)" }), { ...blurIn, duration: 1.2 });
   e.target.querySelectorAll("h2, q").forEach(h => tl.add(textIn(h, { s: .035 }), .1));
   if (e.target.tagName === "FOOTER") tl.add(textIn(e.target, { s: .08, d: 1.2 }), 0);
 }), { threshold: .15, rootMargin: "0px 0px -6% 0px" });
