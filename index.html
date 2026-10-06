@@ -27,7 +27,7 @@
   --r:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{
   background:var(--bg);color:var(--ink);
   font-family:"Inter Tight",-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -35,7 +35,6 @@ body{
   -webkit-font-smoothing:antialiased;
   min-height:100dvh;
 }
-body.locked{overflow:hidden}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 a{color:inherit}
@@ -527,7 +526,7 @@ function enterPage(){
 let openOverlay = null, lastFocus = null;
 function open(el){
   lastFocus = document.activeElement; openOverlay = el;
-  el.classList.add("open"); document.body.classList.add("locked");
+  el.classList.add("open");
   if (!MOTION) return;
   const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const kids = [...el.querySelectorAll(".stag > *, .done.show > *")].filter(shown);
@@ -546,9 +545,10 @@ function close(el, cb){
   openOverlay = null;
   const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const done = () => {
-    el.classList.remove("open"); document.body.classList.remove("locked");
+    el.classList.remove("open");
     if (G) G.set([scrim, panel], { clearProps: "all" });
-    if (lastFocus) lastFocus.focus({ preventScroll: true });
+    // no celular, devolver o foco pode rolar a página sozinho; só no computador
+    if (lastFocus && matchMedia("(hover: hover)").matches) lastFocus.focus({ preventScroll: true });
     if (cb) cb();
   };
   if (!MOTION) return done();
@@ -560,7 +560,10 @@ function close(el, cb){
     .to(scrim, { autoAlpha: 0, duration: .35, ease: "power2.in" }, isWide() ? .1 : .2);
 }
 document.querySelectorAll(".overlay").forEach(o => {
-  o.querySelector(".scrim").addEventListener("click", () => dismiss(o));
+  const scrim = o.querySelector(".scrim");
+  scrim.addEventListener("click", () => dismiss(o));
+  // impede a página de rolar por trás do pop-up sem travar o body (que dá pulo no iPhone)
+  scrim.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && openOverlay) dismiss(openOverlay) });
 function dismiss(o){ o.id === "intro" ? startApp() : close(o) }
@@ -721,6 +724,18 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 if (MOTION) document.querySelectorAll(".reveal, #peca .sec-head, #mengo .sec-head, footer").forEach(el => io.observe(el));
 
 const pills = document.querySelectorAll(".pill");
+// "Datas" volta para o topo da página; as outras vão para a seção. Rolagem feita
+// pelo GSAP (sem âncora/hash), que termina suave mesmo com a barra do Safari mudando.
+pills.forEach(p => p.addEventListener("click", e => {
+  e.preventDefault();
+  const sec = document.getElementById(p.dataset.sec);
+  const top = p.dataset.sec === "datas" ? 0 : Math.max(0, sec.getBoundingClientRect().top + scrollY - 16);
+  if (!G || RM) return scrollTo(0, top);
+  const st = { y: scrollY };
+  G.killTweensOf(st);
+  G.to(st, { y: top, duration: Math.min(1.1, .5 + Math.abs(top - scrollY) / 3000), ease: "power3.inOut",
+    onUpdate: () => scrollTo(0, st.y) });
+}));
 const secIo = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) pills.forEach(p => p.classList.toggle("on", p.dataset.sec === e.target.id));
 }), { rootMargin: "-45% 0px -50% 0px" });
