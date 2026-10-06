@@ -78,41 +78,61 @@ section + section{margin-top:44px}
 .card-big{font-size:clamp(38px,11vw,52px);font-weight:500;letter-spacing:-.05em;line-height:.9;position:relative;z-index:1}
 .card-big small{display:block;font-size:.42em;letter-spacing:-.03em;margin-top:6px;font-weight:500}
 
-.card.swirl,.card.ribbed{color:#fff}
-.card.swirl .meta,.card.ribbed .meta{color:rgba(255,255,255,.78)}
-.card.swirl{
+/* cada data tem sua cor e textura: --c1 claro, --c2 base, --c3 profundo */
+.card.orange{--c1:#FF9A6B;--c2:#F0441B;--c3:#A8240A}
+.card.green {--c1:#8FD3A6;--c2:#22915A;--c3:#0E4D2E}
+.card.blue  {--c1:#9DB8FF;--c2:#2F5BF0;--c3:#13287F}
+.card.purple{--c1:#C9A8FF;--c2:#7B3FE4;--c3:#371580}
+.card.tex{color:#fff;background-color:var(--c2)}
+.card.tex .meta{color:rgba(255,255,255,.8)}
+.card.tex::before,.card.tex::after{content:"";position:absolute;pointer-events:none}
+
+/* seda: manchas suaves que respiram */
+.card.silk{
   background:
-    radial-gradient(120% 60% at 110% 38%, #FF8A5C 0 18%, transparent 46%),
-    radial-gradient(90% 40% at -10% 52%, #FF6A3A 0 20%, transparent 52%),
-    radial-gradient(140% 70% at 50% 120%, #B8270A 0 30%, transparent 70%),
-    linear-gradient(180deg,#C9C9C5 0%, #C9C9C5 28%, #F0441B 48%, #E23A13 100%);
+    radial-gradient(120% 60% at 110% 32%, var(--c1) 0 16%, transparent 48%),
+    radial-gradient(90% 45% at -10% 58%, var(--c1) 0 12%, transparent 50%),
+    radial-gradient(140% 70% at 50% 120%, var(--c3) 0 28%, transparent 70%),
+    linear-gradient(170deg, var(--c1) 0%, var(--c2) 42%, var(--c3) 100%);
 }
-.card.swirl::before{
-  content:"";position:absolute;inset:-20%;
-  background:
-    conic-gradient(from 200deg at 60% 55%, rgba(255,255,255,0) 0deg, rgba(255,190,150,.45) 40deg, rgba(255,255,255,0) 90deg, rgba(120,20,0,.25) 180deg, rgba(255,255,255,0) 260deg);
+.card.silk::before{
+  inset:-20%;
+  background:conic-gradient(from 200deg at 60% 55%, transparent 0deg, rgba(255,255,255,.4) 40deg, transparent 95deg, rgba(0,0,0,.22) 180deg, transparent 260deg);
   filter:blur(18px);animation:drift 14s ease-in-out infinite alternate;
 }
-.card.swirl .meta{color:#3a3a37}
-.card.swirl .card-top svg{color:#0E0E0E}
-@keyframes drift{from{transform:rotate(-6deg) scale(1)}to{transform:rotate(8deg) scale(1.08)}}
+
+/* anéis: ondas concêntricas finas */
+.card.rings{
+  background:
+    radial-gradient(130% 90% at 0% 110%, var(--c3), transparent 65%),
+    repeating-radial-gradient(circle at 115% -15%, color-mix(in srgb, var(--c2) 78%, white) 0 2px, var(--c2) 2px 14px);
+}
+.card.rings::after{inset:0;background:radial-gradient(80% 60% at 100% 0%, rgba(255,255,255,.22), transparent 70%)}
+
+/* dobras: faixas diagonais desfocadas, como tecido */
+.card.folds{background:linear-gradient(160deg, var(--c1), var(--c2) 45%, var(--c3))}
+.card.folds::before{
+  inset:-30%;
+  background:repeating-linear-gradient(125deg, transparent 0 34px, rgba(255,255,255,.28) 48px, transparent 62px, rgba(0,0,0,.2) 80px, transparent 96px);
+  filter:blur(7px);animation:drift 18s ease-in-out infinite alternate;
+}
+
+/* nervuras: tecido canelado */
 .card.ribbed{
   background:
-    linear-gradient(115deg,rgba(255,255,255,.14),rgba(0,0,0,.18)),
-    repeating-linear-gradient(98deg,#E5461D 0 7px,#C9360F 7px 9px,#F05A2C 9px 15px);
+    linear-gradient(115deg, rgba(255,255,255,.14), rgba(0,0,0,.2)),
+    repeating-linear-gradient(98deg, var(--c2) 0 7px, var(--c3) 7px 9px, color-mix(in srgb, var(--c2) 82%, white) 9px 15px);
 }
-.card.ribbed::after{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(80% 120% at 85% 110%,rgba(0,0,0,.28),transparent 60%);
-}
+.card.ribbed::after{inset:0;background:radial-gradient(80% 120% at 85% 110%, rgba(0,0,0,.3), transparent 60%)}
+
+@keyframes drift{from{transform:rotate(-6deg) scale(1)}to{transform:rotate(8deg) scale(1.08)}}
 .confirmed-tag{
-  position:absolute;left:12px;top:50%;z-index:2;
+  position:absolute;right:12px;bottom:14px;z-index:2;
   font-size:12px;font-weight:500;padding:5px 9px 5px 7px;border-radius:99px;
-  background:var(--ink);color:#fff;display:none;align-items:center;gap:5px;
+  background:#fff;color:var(--ink);display:none;align-items:center;gap:5px;
   animation:pop .6s var(--spring);
 }
 .card.is-confirmed .confirmed-tag{display:inline-flex}
-.card.ribbed .confirmed-tag,.card.swirl .confirmed-tag{background:#fff;color:var(--ink)}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 
 /* ---------- about ---------- */
@@ -414,10 +434,10 @@ const CONFIG = {
   prazo: "10/10",
 };
 const DATAS = [
-  { id: "16/10", dia: 16, semana: "Sexta-feira",  curto: "Sexta",  hora: 19, estilo: "swirl tall" },
-  { id: "17/10", dia: 17, semana: "Sábado",       curto: "Sábado", hora: 18, estilo: "" },
-  { id: "20/10", dia: 20, semana: "Terça-feira",  curto: "Terça",  hora: 19, estilo: "" },
-  { id: "24/10", dia: 24, semana: "Sábado",       curto: "Sábado", hora: 19, estilo: "ribbed wide" },
+  { id: "16/10", dia: 16, semana: "Sexta-feira",  curto: "Sexta",  hora: 19, estilo: "tex orange silk tall" },
+  { id: "17/10", dia: 17, semana: "Sábado",       curto: "Sábado", hora: 18, estilo: "tex green rings" },
+  { id: "20/10", dia: 20, semana: "Terça-feira",  curto: "Terça",  hora: 19, estilo: "tex blue folds" },
+  { id: "24/10", dia: 24, semana: "Sábado",       curto: "Sábado", hora: 19, estilo: "tex purple ribbed wide" },
 ];
 const ANO = 2026;
 /* =============================== */
