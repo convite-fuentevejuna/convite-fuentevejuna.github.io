@@ -493,15 +493,16 @@ function split(el, chars){
   walk(el);
   return el.querySelectorAll(".w");
 }
-// Texto surgindo do desfoque, palavra por palavra
+// Texto surgindo palavra por palavra: só opacidade e um leve deslocamento.
+// Sem blur e sem camada 3D, para não haver "salto" de nitidez no fim.
 function textIn(el, o = {}){
   if (!MOTION || !el) return G ? G.timeline() : null;
   return G.fromTo(split(el, o.chars),
-    m({ autoAlpha: 0, y: o.chars ? "0.45em" : "0.35em", filter: "blur(8px)" }),
-    { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: o.d || .9, ease: "power3.out",
-      stagger: o.s || (o.chars ? .028 : .03), clearProps: "filter,transform" });
+    m({ autoAlpha: 0, y: o.chars ? "0.3em" : "0.25em" }),
+    { autoAlpha: 1, y: 0, duration: o.d || .8, ease: "power2.out", force3D: false,
+      stagger: o.s || (o.chars ? .028 : .03), clearProps: "transform" });
 }
-const blurIn = { autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", ease: "expo.out", clearProps: "filter,transform,transition" };
+const blurIn = { autoAlpha: 1, y: 0, scale: 1, ease: "expo.out", force3D: false, clearProps: "transform,transition" };
 
 /* ---- page entrance: boxes settle into the grid ---- */
 let entered = false;
@@ -512,9 +513,9 @@ function enterPage(){
   const tl = G.timeline();
   G.set("h1", { autoAlpha: 1 });
   tl.add(textIn($("h1"), { chars: true, d: 1.1, s: .03 }), 0)
-    .fromTo("#datas .sec-head", m({ autoAlpha: 0, y: 10, filter: "blur(6px)" }), { ...blurIn, duration: .8 }, .25)
+    .fromTo("#datas .sec-head", m({ autoAlpha: 0, y: 10 }), { ...blurIn, duration: .8 }, .25)
     .fromTo(cards,
-      m({ autoAlpha: 0, x: i => from[i].x, y: i => from[i].y, rotation: i => from[i].r, scale: .86, filter: "blur(12px)", transition: "none" }),
+      m({ autoAlpha: 0, x: i => from[i].x, y: i => from[i].y, rotation: i => from[i].r, scale: .86, transition: "none" }),
       { ...blurIn, x: 0, rotation: 0, duration: 1.3, stagger: .09 }, .3)
     .fromTo(cards.map(c => c.querySelector(".card-big")), m({ autoAlpha: 0, y: 26 }),
       { autoAlpha: 1, y: 0, duration: 1.1, stagger: .09, ease: "expo.out", clearProps: "transform" }, .55)
@@ -534,9 +535,9 @@ function open(el){
   const tl = G.timeline();
   tl.fromTo(scrim, { autoAlpha: 0 }, { autoAlpha: 1, duration: .45, ease: "power2.out" })
     .fromTo(panel,
-      RM ? { autoAlpha: 0 } : isWide() ? { y: 50, scale: .94, autoAlpha: 0, filter: "blur(10px)" } : { yPercent: 100 },
+      RM ? { autoAlpha: 0 } : isWide() ? { y: 50, scale: .94, autoAlpha: 0 } : { yPercent: 100 },
       RM ? { autoAlpha: 1, duration: .5 } : isWide() ? { ...blurIn, duration: .9 } : { yPercent: 0, duration: .85, ease: "expo.out" }, .05)
-    .fromTo(kids, m({ autoAlpha: 0, y: 18, filter: "blur(6px)", transition: "none" }),
+    .fromTo(kids, m({ autoAlpha: 0, y: 18, transition: "none" }),
       { ...blurIn, duration: .75, stagger: .06, ease: "power3.out" }, .15);
   const h = [...el.querySelectorAll("h2, h3")].find(shown);
   if (h) tl.add(textIn(h, { s: .045 }), .25);
@@ -554,7 +555,7 @@ function close(el, cb){
   G.killTweensOf([scrim, panel]);
   G.timeline({ onComplete: done })
     .to(panel, RM ? { autoAlpha: 0, duration: .3 } : isWide()
-      ? { y: 30, scale: .96, autoAlpha: 0, filter: "blur(8px)", duration: .4, ease: "power3.in" }
+      ? { y: 30, scale: .96, autoAlpha: 0, duration: .4, ease: "power3.in" }
       : { yPercent: 100, duration: .5, ease: "power3.in" })
     .to(scrim, { autoAlpha: 0, duration: .35, ease: "power2.in" }, isWide() ? .1 : .2);
 }
@@ -679,12 +680,12 @@ function showDone(c, celebrate){
   const swap = () => { body.style.display = "none"; d.classList.remove("show"); void d.offsetWidth; d.classList.add("show") };
   if (!MOTION || !celebrate){ swap(); if (celebrate) burst(); return }
   const h0 = panel.offsetHeight;
-  G.to([...body.children], { autoAlpha: 0, y: RM ? 0 : -12, filter: "blur(8px)", duration: .32, stagger: .03, ease: "power2.in", onComplete(){
+  G.to([...body.children], { autoAlpha: 0, y: RM ? 0 : -12, duration: .32, stagger: .03, ease: "power2.in", onComplete(){
     swap(); G.set([...body.children], { clearProps: "all" });
     const h1 = panel.offsetHeight;
     G.timeline()
       .fromTo(panel, { height: h0 }, { height: h1, duration: .65, ease: "expo.out", clearProps: "height" })
-      .fromTo([...d.children], m({ autoAlpha: 0, y: 24, filter: "blur(8px)", transition: "none" }),
+      .fromTo([...d.children], m({ autoAlpha: 0, y: 24, transition: "none" }),
         { ...blurIn, duration: .8, stagger: .08, ease: "power3.out" }, .05)
       .fromTo(".check", RM ? { autoAlpha: 0 } : { scale: 0, rotation: -40 }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 1, ease: RM ? "power2.out" : "elastic.out(1,.55)", clearProps: "transform" }, .1)
       .add(textIn($("#doneTitle"), { s: .05 }), .15)
@@ -713,7 +714,7 @@ const io = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
   io.unobserve(e.target);
   const tl = G.timeline();
-  tl.fromTo(e.target, m({ autoAlpha: 0, y: 36, scale: .97, filter: "blur(12px)" }), { ...blurIn, duration: 1.2 });
+  tl.fromTo(e.target, m({ autoAlpha: 0, y: 36, scale: .97 }), { ...blurIn, duration: 1.2 });
   e.target.querySelectorAll("h2, q").forEach(h => tl.add(textIn(h, { s: .035 }), .1));
   if (e.target.tagName === "FOOTER") tl.add(textIn(e.target, { s: .08, d: 1.2 }), 0);
 }), { threshold: .15, rootMargin: "0px 0px -6% 0px" });
