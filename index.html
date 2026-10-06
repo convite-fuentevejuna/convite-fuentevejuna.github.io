@@ -189,9 +189,12 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
   position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;
   visibility:hidden;
 }
-/* o desfoque fica numa camada própria: no Safari, animar a opacidade de quem tem
-   backdrop-filter quebra o recorte arredondado dos filhos */
-.scrim{position:absolute;inset:0;background:rgba(20,20,18,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+/* fundo escuro dos pop-ups: sem backdrop-filter, porque no Safari do iPhone animar um
+   fundo desfocado junto com o painel faz partes do painel sumirem/piscarem */
+.scrim{position:absolute;inset:0;background:rgba(18,18,16,.42)}
+.panel{will-change:transform}
+/* enquanto um pop-up está aberto, as texturas animadas das datas ficam paradas */
+.modal .card.tex::before{animation-play-state:paused}
 .overlay.open{visibility:visible}
 .panel{
   position:relative;width:100%;max-width:560px;background:var(--bg);
@@ -526,7 +529,7 @@ function enterPage(){
 let openOverlay = null, lastFocus = null;
 function open(el){
   lastFocus = document.activeElement; openOverlay = el;
-  el.classList.add("open");
+  el.classList.add("open"); document.documentElement.classList.add("modal");
   if (!MOTION) return;
   const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const kids = [...el.querySelectorAll(".stag > *, .done.show > *")].filter(shown);
@@ -545,7 +548,7 @@ function close(el, cb){
   openOverlay = null;
   const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const done = () => {
-    el.classList.remove("open");
+    el.classList.remove("open"); document.documentElement.classList.remove("modal");
     if (G) G.set([scrim, panel], { clearProps: "all" });
     // no celular, devolver o foco pode rolar a página sozinho; só no computador
     if (lastFocus && matchMedia("(hover: hover)").matches) lastFocus.focus({ preventScroll: true });
