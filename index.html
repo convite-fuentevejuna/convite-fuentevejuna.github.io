@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Convite · Fuenteovejuna</title>
+<meta name="description" content="Você está convidado para assistir Fuenteovejuna. 4 datas em outubro — confirme sua presença.">
+<meta property="og:title" content="Convite · Fuenteovejuna">
+<meta property="og:description" content="4 datas em outubro. Confirme sua presença até o dia 10!">
+<meta name="theme-color" content="#ECECEA">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F0441B'/><text x='16' y='23' font-family='Helvetica' font-size='20' font-weight='600' text-anchor='middle' fill='white'>F</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ECECEA;
+  --card:#FFFFFF;
+  --ink:#0E0E0E;
+  --muted:#8A8A86;
+  --line:#DCDCD8;
+  --accent:#F0441B;
+  --accent-deep:#C9300D;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.34,1.32,.5,1);
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:"Inter Tight",-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-feature-settings:"ss01","cv11";
+  -webkit-font-smoothing:antialiased;
+  min-height:100dvh;
+}
+body.locked{overflow:hidden}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit}
+
+.app{max-width:560px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 12px 120px}
+
+/* ---------- header ---------- */
+.top{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 6px 22px}
+.eyebrow{font-size:13px;line-height:1.25;color:var(--muted);letter-spacing:-.005em}
+h1{font-size:clamp(46px,14vw,72px);font-weight:500;letter-spacing:-.055em;line-height:.92;margin-top:10px}
+.round{
+  width:48px;height:48px;border-radius:50%;background:#DDDDD9;display:grid;place-items:center;
+  flex-shrink:0;transition:transform .4s var(--spring),background .3s;
+}
+.round:hover{background:#D2D2CD}
+.round:active{transform:scale(.9)}
+
+/* ---------- section heads ---------- */
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;padding:0 6px 10px;font-size:13px;color:var(--muted)}
+.sec-head strong{color:var(--ink);font-weight:500}
+section{scroll-margin-top:16px}
+section + section{margin-top:44px}
+
+/* ---------- date grid ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.card{
+  position:relative;overflow:hidden;text-align:left;
+  background:var(--card);border-radius:var(--r);
+  min-height:188px;padding:12px 12px 14px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .5s var(--spring),box-shadow .4s var(--ease);
+  opacity:0;translate:0 18px;scale:.98;
+}
+.ready .card{animation:rise .9s var(--ease) forwards}
+.ready .card:nth-child(2){animation-delay:.07s}
+.ready .card:nth-child(3){animation-delay:.14s}
+.ready .card:nth-child(4){animation-delay:.21s}
+@keyframes rise{to{opacity:1;translate:0 0;scale:1}}
+.card:hover{box-shadow:0 10px 30px -14px rgba(0,0,0,.25)}
+.card:active{transform:scale(.975);transition-duration:.15s}
+.card.tall{grid-row:span 2}
+.card.wide{grid-column:span 2;min-height:170px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;font-size:13px;line-height:1.2;position:relative;z-index:1}
+.card-top .meta{color:var(--muted)}
+.card .arrow{width:12px;height:12px;transition:transform .5s var(--spring)}
+.card:hover .arrow{transform:translate(2px,-2px)}
+.card-big{font-size:clamp(38px,11vw,52px);font-weight:500;letter-spacing:-.05em;line-height:.9;position:relative;z-index:1}
+.card-big small{display:block;font-size:.42em;letter-spacing:-.03em;margin-top:6px;font-weight:500}
+
+.card.swirl,.card.ribbed{color:#fff}
+.card.swirl .meta,.card.ribbed .meta{color:rgba(255,255,255,.78)}
+.card.swirl{
+  background:
+    radial-gradient(120% 60% at 110% 38%, #FF8A5C 0 18%, transparent 46%),
+    radial-gradient(90% 40% at -10% 52%, #FF6A3A 0 20%, transparent 52%),
+    radial-gradient(140% 70% at 50% 120%, #B8270A 0 30%, transparent 70%),
+    linear-gradient(180deg,#C9C9C5 0%, #C9C9C5 28%, #F0441B 48%, #E23A13 100%);
+}
+.card.swirl::before{
+  content:"";position:absolute;inset:-20%;
+  background:
+    conic-gradient(from 200deg at 60% 55%, rgba(255,255,255,0) 0deg, rgba(255,190,150,.45) 40deg, rgba(255,255,255,0) 90deg, rgba(120,20,0,.25) 180deg, rgba(255,255,255,0) 260deg);
+  filter:blur(18px);animation:drift 14s ease-in-out infinite alternate;
+}
+.card.swirl .meta{color:#3a3a37}
+.card.swirl .card-top svg{color:#0E0E0E}
+@keyframes drift{from{transform:rotate(-6deg) scale(1)}to{transform:rotate(8deg) scale(1.08)}}
+.card.ribbed{
+  background:
+    linear-gradient(115deg,rgba(255,255,255,.14),rgba(0,0,0,.18)),
+    repeating-linear-gradient(98deg,#E5461D 0 7px,#C9360F 7px 9px,#F05A2C 9px 15px);
+}
+.card.ribbed::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(80% 120% at 85% 110%,rgba(0,0,0,.28),transparent 60%);
+}
+.confirmed-tag{
+  position:absolute;left:12px;top:50%;z-index:2;
+  font-size:12px;font-weight:500;padding:5px 9px 5px 7px;border-radius:99px;
+  background:var(--ink);color:#fff;display:none;align-items:center;gap:5px;
+  animation:pop .6s var(--spring);
+}
+.card.is-confirmed .confirmed-tag{display:inline-flex}
+.card.ribbed .confirmed-tag,.card.swirl .confirmed-tag{background:#fff;color:var(--ink)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+
+/* ---------- about ---------- */
+.block{background:var(--card);border-radius:var(--r);padding:16px 16px 20px}
+.block + .block{margin-top:6px}
+.block h2{font-size:clamp(34px,10vw,46px);font-weight:500;letter-spacing:-.05em;line-height:.95;margin:28px 0 14px}
+.block h2:first-child{margin-top:0}
+.block p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:#2a2a28}
+.block p + p{margin-top:10px}
+.block .eyebrow + h2{margin-top:30px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.fact{background:var(--card);border-radius:var(--r);padding:12px 12px 14px;min-height:96px;display:flex;flex-direction:column;justify-content:space-between}
+.fact b{font-size:22px;font-weight:500;letter-spacing:-.035em;line-height:1}
+.quote{
+  background:var(--ink);color:#fff;border-radius:var(--r);padding:16px 16px 20px;margin-top:6px;
+}
+.quote q{display:block;font-size:clamp(28px,8vw,38px);font-weight:500;letter-spacing:-.045em;line-height:1;quotes:"“" "”"}
+.quote .eyebrow{color:#9a9a96;margin-top:18px}
+.block.orange{background:var(--accent);color:#fff}
+.block.orange p{color:rgba(255,255,255,.92)}
+.block.orange .eyebrow{color:rgba(255,255,255,.7)}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
+
+/* ---------- dock ---------- */
+.dock{
+  position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translate(-50%,140%);
+  display:flex;gap:6px;padding:6px;border-radius:99px;
+  background:rgba(236,236,234,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.25);z-index:20;
+  transition:transform .8s var(--spring) .35s;
+}
+.ready .dock,.dock.show{transform:translate(-50%,0)}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:99px;
+  background:#fff;font-size:15px;font-weight:500;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;
+  transition:background .35s var(--ease),color .35s var(--ease),transform .4s var(--spring);
+}
+.pill:active{transform:scale(.94)}
+.pill.on{background:var(--ink);color:#fff}
+.badge{min-width:20px;height:20px;border-radius:99px;background:var(--accent);color:#fff;font-size:12px;display:grid;place-items:center;padding:0 6px}
+
+/* ---------- overlays ---------- */
+.overlay{
+  position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(20,20,18,0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
+  visibility:hidden;transition:background .5s var(--ease),backdrop-filter .5s var(--ease),-webkit-backdrop-filter .5s var(--ease),visibility 0s linear .5s;
+}
+.overlay.open{visibility:visible;background:rgba(20,20,18,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition-delay:0s}
+.panel{
+  width:100%;max-width:560px;background:var(--bg);
+  border-radius:22px 22px 0 0;padding:10px 12px max(16px,env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .6s var(--ease);
+  max-height:92dvh;overflow:auto;overscroll-behavior:contain;
+}
+.overlay.open .panel{transform:none;transition:transform .75s var(--spring)}
+@media (min-width:640px){
+  .overlay{align-items:center}
+  .panel{border-radius:22px;padding-bottom:16px;transform:translateY(40px) scale(.96);opacity:0;transition:transform .5s var(--ease),opacity .35s}
+  .overlay.open .panel{opacity:1}
+}
+.handle{width:38px;height:5px;border-radius:9px;background:#C9C9C4;margin:0 auto 10px}
+@media (min-width:640px){.handle{display:none}}
+
+/* stagger children inside panels */
+.stag > *{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.overlay.open .stag > *{opacity:1;transform:none}
+.overlay.open .stag > *:nth-child(1){transition-delay:.12s}
+.overlay.open .stag > *:nth-child(2){transition-delay:.18s}
+.overlay.open .stag > *:nth-child(3){transition-delay:.24s}
+.overlay.open .stag > *:nth-child(4){transition-delay:.30s}
+.overlay.open .stag > *:nth-child(5){transition-delay:.36s}
+.overlay.open .stag > *:nth-child(6){transition-delay:.42s}
+
+/* intro */
+.intro-art{
+  height:180px;border-radius:14px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 70% at 100% 30%, #FF9466 0 16%, transparent 45%),
+    radial-gradient(100% 50% at 0% 70%, #FF6A3A 0 18%, transparent 50%),
+    linear-gradient(180deg,#F0441B,#C9300D);
+  display:flex;align-items:flex-end;padding:14px;color:#fff;
+}
+.intro-art::before{
+  content:"";position:absolute;inset:-30%;
+  background:conic-gradient(from 120deg at 55% 50%, transparent 0 30deg, rgba(255,210,180,.5) 70deg, transparent 120deg, rgba(110,15,0,.3) 220deg, transparent 300deg);
+  filter:blur(22px);animation:drift 10s ease-in-out infinite alternate;
+}
+.intro-art span{position:relative;font-size:13px;opacity:.85}
+.intro-card{background:#fff;border-radius:14px;padding:18px 16px 18px;margin-top:6px}
+.intro-card h2{font-size:clamp(32px,9vw,42px);font-weight:500;letter-spacing:-.05em;line-height:.95}
+.intro-card p{font-size:17px;line-height:1.4;letter-spacing:-.012em;margin-top:14px;color:#2a2a28}
+.intro-card p b{font-weight:600;color:var(--ink)}
+.sign{margin-top:18px;font-size:15px;color:var(--muted)}
+.sign b{color:var(--ink);font-weight:500}
+
+/* buttons */
+.btn{
+  width:100%;height:56px;border-radius:99px;margin-top:6px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:16px;font-weight:500;letter-spacing:-.01em;text-decoration:none;
+  background:#fff;color:var(--ink);
+  transition:transform .4s var(--spring),background .3s,opacity .3s;
+}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.accent{background:var(--accent);color:#fff}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.btn .spin{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite;display:none}
+.btn.loading .spin{display:block}
+.btn.loading .lbl{opacity:.7}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* date sheet */
+.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;background:#fff;border-radius:14px;padding:14px 14px 18px}
+.sheet-head h2{font-size:clamp(40px,12vw,56px);font-weight:500;letter-spacing:-.055em;line-height:.9;margin-top:22px}
+.x{width:36px;height:36px;border-radius:50%;background:var(--bg);display:grid;place-items:center;transition:transform .4s var(--spring)}
+.x:active{transform:scale(.88) rotate(90deg)}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.info div{background:#fff;border-radius:14px;padding:12px 14px 14px;min-height:84px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}
+.info div.full{grid-column:span 2}
+.info dt{font-size:13px;color:var(--muted)}
+.info dd{font-size:19px;font-weight:500;letter-spacing:-.03em;line-height:1.15}
+.info dd small{display:block;font-size:14px;font-weight:400;color:var(--muted);letter-spacing:-.01em;margin-top:3px}
+.info a{font-size:14px;color:var(--accent-deep);text-decoration:none;font-weight:500}
+
+.form{background:#fff;border-radius:14px;padding:14px;margin-top:6px}
+.field{display:block}
+.field span{font-size:13px;color:var(--muted)}
+.field input{
+  width:100%;border:0;border-bottom:1px solid var(--line);padding:8px 0 10px;margin-top:2px;
+  font-size:22px;font-weight:500;letter-spacing:-.03em;outline:none;background:transparent;border-radius:0;
+  transition:border-color .3s;
+}
+.field input:focus{border-color:var(--ink)}
+.field input::placeholder{color:#C4C4BF}
+.stepper{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.stepper span{font-size:13px;color:var(--muted)}
+.stepper .ctrl{display:flex;align-items:center;gap:4px;background:var(--bg);border-radius:99px;padding:4px}
+.stepper button{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:20px;transition:transform .35s var(--spring)}
+.stepper button:active{transform:scale(.85)}
+.stepper output{min-width:34px;text-align:center;font-size:20px;font-weight:500;letter-spacing:-.03em}
+.stepper output.bump{animation:bump .4s var(--spring)}
+@keyframes bump{50%{transform:scale(1.3)}}
+.err{color:var(--accent-deep);font-size:14px;margin-top:10px;min-height:0;display:none}
+.err.show{display:block;animation:pop .4s var(--spring)}
+.shake{animation:shake .45s var(--ease)}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+.done{display:none;text-align:left}
+.done.show{display:block}
+.done-card{background:#fff;border-radius:14px;padding:16px 14px 20px;margin-top:6px}
+.check{width:56px;height:56px;border-radius:50%;background:var(--accent);display:grid;place-items:center;animation:pop .7s var(--spring)}
+.check path{stroke-dasharray:30;stroke-dashoffset:30;animation:draw .55s var(--ease) .25s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.done-card h3{font-size:clamp(30px,9vw,40px);font-weight:500;letter-spacing:-.05em;line-height:.95;margin-top:22px}
+.done-card p{font-size:16px;line-height:1.4;color:#2a2a28;margin-top:10px}
+.done .btn{animation:rise .7s var(--ease) both .35s;opacity:0;translate:0 12px}
+.done .btn + .btn{animation-delay:.45s}
+
+/* confetti dots */
+.burst{position:fixed;pointer-events:none;z-index:60;width:8px;height:8px;border-radius:50%}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .card,.reveal,.stag > *{opacity:1!important;transform:none!important;translate:none!important;scale:none!important}
+}
+</style>
+</head>
+<body>
+
+<main class="app" id="app">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Convite · Outubro<br>Lope de Vega, 1619</p>
+      <h1>Fuente&shy;ovejuna</h1>
+    </div>
+    <button class="round" id="infoBtn" aria-label="Rever o convite">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 6h9M15 6h2M3 14h2M8 14h9"/><circle cx="13.5" cy="6" r="1.6"/><circle cx="6.5" cy="14" r="1.6"/></svg>
+    </button>
+  </header>
+
+  <section id="datas">
+    <div class="sec-head"><strong>Escolha uma data</strong><span>Confirme até 10/10</span></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="peca">
+    <div class="sec-head"><strong>A peça</strong><span>3 atos · 38 cenas</span></div>
+    <article class="block reveal">
+      <p class="eyebrow">Lope de Vega · Adaptação de Giovanni Scotton</p>
+      <h2>Um povo inteiro contra um tirano.</h2>
+      <p>Espanha, 1476. Na pequena vila de Fuenteovejuna, o Comendador Fernão Gomez governa como dono de tudo: rouba as colheitas, humilha os homens e persegue as mulheres da vila.</p>
+      <p>Até que Laurência, depois de ser atacada na noite do próprio casamento, convoca o povo a reagir. A vila se levanta, derruba o Comendador e, quando o juiz do rei chega para descobrir quem foi o culpado, todos, um a um, sob tortura, dão a mesma resposta.</p>
+    </article>
+    <div class="quote reveal">
+      <q>Quem matou o Comendador? Fuenteovejuna, senhor.</q>
+      <p class="eyebrow">Ato III</p>
+    </div>
+    <div class="facts reveal">
+      <div class="fact"><span class="eyebrow">Escrita em</span><b>1619</b></div>
+      <div class="fact"><span class="eyebrow">Tema</span><b>Honra, abuso e coragem coletiva</b></div>
+    </div>
+  </section>
+
+  <section id="mengo">
+    <div class="sec-head"><strong>O personagem</strong><span>Vitor Heitor</span></div>
+    <article class="block orange reveal">
+      <p class="eyebrow">Camponês de Fuenteovejuna</p>
+      <h2>Mengo</h2>
+      <p>O filósofo de botequim da vila. Mengo jura que o amor não existe: para ele, tudo o que existe é amor-próprio. Gosta de um bom vinho, de uma boa discussão e de tirar sarro de tudo.</p>
+    </article>
+    <article class="block reveal">
+      <p>Mas, quando os soldados do Comendador tentam levar Jacinta à força, é ele quem fica. Desarmado, encara os soldados dizendo que tem “a melhor arma do mundo: coragem”. E paga caro por isso.</p>
+      <p>Mengo é o riso e o nervo da peça: o mais fraco da vila, que ninguém espera que aguente. E que, quando o juiz aperta, gagueja… e responde como todos: <b>Fuenteovejuna.</b></p>
+    </article>
+    <div class="quote reveal">
+      <q>Tenho a melhor arma do mundo: coragem.</q>
+      <p class="eyebrow">Mengo, Ato II</p>
+    </div>
+  </section>
+
+  <footer>Te espero lá ♥ Vitor Heitor</footer>
+</main>
+
+<nav class="dock" id="dock" aria-label="Seções">
+  <a class="pill on" href="#datas" data-sec="datas">Datas <span class="badge">4</span></a>
+  <a class="pill" href="#peca" data-sec="peca">A peça</a>
+  <a class="pill" href="#mengo" data-sec="mengo">Mengo</a>
+</nav>
+
+<!-- Intro -->
+<div class="overlay" id="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+  <div class="panel">
+    <div class="handle"></div>
+    <div class="stag">
+      <div class="intro-art"><span>4 datas · Outubro</span></div>
+      <div class="intro-card">
+        <h2 id="introTitle">Você está convidado.</h2>
+        <p>Venha assistir à apresentação da peça <b>Fuenteovejuna</b>, que vai acontecer em <b>4 datas no mês de outubro</b>. Confirme até o dia <b>10</b>!</p>
+        <p class="sign">— <b>Vitor Heitor</b></p>
+      </div>
+      <button class="btn primary" id="introGo"><span class="lbl">Continuar</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Date sheet -->
+<div class="overlay" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="panel">
+    <div class="handle"></div>
+    <div class="stag" id="sheetBody">
+      <div class="sheet-head">
+        <div>
+          <p class="eyebrow" id="sWeekday"></p>
+          <h2 id="sheetTitle"></h2>
+        </div>
+        <button class="x" id="sheetClose" aria-label="Fechar">
+          <svg width="14" height="14" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
+        </button>
+      </div>
+      <dl class="info">
+        <div><dt>Horário</dt><dd id="sTime"></dd></div>
+        <div><dt>Duração</dt><dd id="sDur"></dd></div>
+        <div class="full"><dt>Local</dt><dd id="sPlace"></dd><a id="sMap" target="_blank" rel="noopener">Abrir no mapa ↗</a></div>
+      </dl>
+      <form class="form" id="form" novalidate>
+        <label class="field"><span>Seu nome</span>
+          <input id="name" name="nome" autocomplete="name" placeholder="Como te chamo?" maxlength="80" required>
+        </label>
+        <div class="stepper">
+          <span>Quantas pessoas<br>(contando você)</span>
+          <div class="ctrl">
+            <button type="button" id="minus" aria-label="Menos uma pessoa">−</button>
+            <output id="qty">1</output>
+            <button type="button" id="plus" aria-label="Mais uma pessoa">+</button>
+          </div>
+        </div>
+        <p class="err" id="err"></p>
+      </form>
+      <button class="btn accent" id="confirm"><span class="spin"></span><span class="lbl">Confirmar presença</span></button>
+    </div>
+    <div class="done" id="done">
+      <div class="done-card">
+        <div class="check"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.5l4.5 4.5L20 8.5"/></svg></div>
+        <h3 id="doneTitle"></h3>
+        <p id="doneText"></p>
+      </div>
+      <a class="btn primary" id="gcal" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="14" height="13" rx="2.5"/><path d="M2 7h14M6 1.5v3M12 1.5v3" stroke-linecap="round"/></svg>
+        <span>Adicionar ao Google Agenda</span>
+      </a>
+      <button class="btn" id="doneClose">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== Config — edite aqui ===== */
+const CONFIG = {
+  // URL do Web App do Google Apps Script (planilha de confirmações)
+  scriptUrl: "https://script.google.com/macros/s/AKfycbw2-Pc-waSQAqcJBQGIYs-gViat5qOjTt71qPeS53k4I139H7ZNxE04aDgAjL3CH-FB/exec",
+  local: "Local a confirmar",
+  endereco: "",
+  duracaoHoras: 2,
+  prazo: "10/10",
+};
+const DATAS = [
+  { id: "16/10", dia: 16, semana: "Sexta-feira",  curto: "Sexta",  hora: 19, estilo: "swirl tall" },
+  { id: "17/10", dia: 17, semana: "Sábado",       curto: "Sábado", hora: 18, estilo: "" },
+  { id: "20/10", dia: 20, semana: "Terça-feira",  curto: "Terça",  hora: 19, estilo: "" },
+  { id: "24/10", dia: 24, semana: "Sábado",       curto: "Sábado", hora: 19, estilo: "ribbed wide" },
+];
+const ANO = 2026;
+/* =============================== */
+
+const $ = s => document.querySelector(s);
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)) }catch(e){ return null } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} },
+};
+const confirmed = store.get("fv_confirmed") || {};
+const arrow = '<svg class="arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M4 2h6v6"/></svg>';
+
+/* ---- render cards ---- */
+const grid = $("#grid");
+DATAS.forEach((d, i) => {
+  const b = document.createElement("button");
+  b.className = "card " + d.estilo;
+  b.dataset.i = i;
+  b.innerHTML = `
+    <div class="card-top"><span class="meta">${d.curto}<br>${d.hora}h</span>${arrow}</div>
+    <span class="confirmed-tag"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2.5 6.5l2.2 2.2L9.5 3.5"/></svg>Confirmado</span>
+    <div class="card-big">${d.dia}<small>outubro</small></div>`;
+  if (confirmed[d.id]) b.classList.add("is-confirmed");
+  b.addEventListener("click", () => openSheet(i));
+  grid.appendChild(b);
+});
+
+/* ---- overlays ---- */
+let openOverlay = null, lastFocus = null;
+function open(el){
+  lastFocus = document.activeElement;
+  el.classList.add("open"); document.body.classList.add("locked"); openOverlay = el;
+}
+function close(el){
+  el.classList.remove("open"); document.body.classList.remove("locked"); openOverlay = null;
+  if (lastFocus) lastFocus.focus({preventScroll:true});
+}
+document.querySelectorAll(".overlay").forEach(o => {
+  o.addEventListener("click", e => { if (e.target === o) dismiss(o) });
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && openOverlay) dismiss(openOverlay) });
+function dismiss(o){ o.id === "intro" ? startApp() : close(o) }
+
+/* ---- intro ---- */
+const intro = $("#intro");
+function startApp(){
+  close(intro);
+  try{ sessionStorage.setItem("fv_intro","1") }catch(e){}
+  setTimeout(() => document.body.classList.add("ready"), 120);
+}
+$("#introGo").addEventListener("click", startApp);
+$("#infoBtn").addEventListener("click", () => open(intro));
+let seen = false; try{ seen = sessionStorage.getItem("fv_intro") }catch(e){}
+if (seen) document.body.classList.add("ready");
+else requestAnimationFrame(() => setTimeout(() => { open(intro); $("#introGo").focus({preventScroll:true}) }, 250));
+
+/* ---- sheet ---- */
+const sheet = $("#sheet");
+let cur = null, qty = 1;
+function pad(n){ return String(n).padStart(2,"0") }
+function mapUrl(){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([CONFIG.local, CONFIG.endereco].filter(Boolean).join(", ")) }
+function gcalUrl(d){
+  const start = `${ANO}10${pad(d.dia)}T${pad(d.hora)}0000`;
+  const end = `${ANO}10${pad(d.dia)}T${pad(d.hora + CONFIG.duracaoHoras)}0000`;
+  const p = new URLSearchParams({
+    action: "TEMPLATE",
+    text: "Fuenteovejuna — peça com Vitor Heitor",
+    dates: `${start}/${end}`,
+    ctz: "America/Sao_Paulo",
+    details: "Vitor Heitor interpreta Mengo em Fuenteovejuna, de Lope de Vega.\nPresença confirmada pelo convite: " + location.href,
+    location: [CONFIG.local, CONFIG.endereco].filter(Boolean).join(", "),
+  });
+  return "https://calendar.google.com/calendar/render?" + p.toString();
+}
+function setQty(n){
+  qty = Math.max(1, Math.min(10, n));
+  const o = $("#qty"); o.textContent = qty;
+  o.classList.remove("bump"); void o.offsetWidth; o.classList.add("bump");
+}
+function openSheet(i){
+  cur = DATAS[i];
+  $("#sWeekday").textContent = cur.semana;
+  $("#sheetTitle").textContent = `${cur.dia} de outubro`;
+  $("#sTime").innerHTML = `${cur.hora}h<small>Chegue uns 15 min antes</small>`;
+  $("#sDur").innerHTML = `~${CONFIG.duracaoHoras}h<small>3 atos</small>`;
+  $("#sPlace").innerHTML = CONFIG.local + (CONFIG.endereco ? `<small>${CONFIG.endereco}</small>` : "");
+  $("#sMap").href = mapUrl();
+  $("#sMap").style.display = CONFIG.endereco ? "" : "none";
+  $("#err").className = "err";
+  const prev = confirmed[cur.id];
+  $("#name").value = (prev && prev.nome) || store.get("fv_name") || "";
+  setQty(prev ? prev.pessoas : 1);
+  if (prev) showDone(prev, false); else { $("#sheetBody").style.display = ""; $("#done").classList.remove("show"); }
+  resetBtn();
+  sheet.querySelector(".panel").scrollTop = 0;
+  open(sheet);
+}
+$("#sheetClose").addEventListener("click", () => close(sheet));
+$("#doneClose").addEventListener("click", () => close(sheet));
+$("#minus").addEventListener("click", () => setQty(qty - 1));
+$("#plus").addEventListener("click", () => setQty(qty + 1));
+$("#form").addEventListener("submit", e => { e.preventDefault(); submit() });
+
+function resetBtn(){ const b = $("#confirm"); b.disabled = false; b.classList.remove("loading"); b.querySelector(".lbl").textContent = "Confirmar presença" }
+function fail(msg){
+  const e = $("#err"); e.textContent = msg; e.className = "err show";
+  const f = $("#form"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
+}
+$("#confirm").addEventListener("click", submit);
+
+async function submit(){
+  const nome = $("#name").value.trim();
+  if (nome.length < 2){ fail("Escreve seu nome pra eu saber quem vem 🙂"); $("#name").focus(); return }
+  const b = $("#confirm"); b.disabled = true; b.classList.add("loading"); b.querySelector(".lbl").textContent = "Confirmando…";
+  const payload = { nome, pessoas: qty, data: cur.id };
+  try{
+    if (!CONFIG.scriptUrl) throw new Error("sem url");
+    const r = await fetch(CONFIG.scriptUrl, { method: "POST", body: JSON.stringify(payload) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || "erro");
+  }catch(err){
+    resetBtn(); fail("Não consegui confirmar agora. Tenta de novo em instantes?"); return;
+  }
+  store.set("fv_name", nome);
+  confirmed[cur.id] = { nome, pessoas: qty };
+  store.set("fv_confirmed", confirmed);
+  grid.querySelector(`[data-i="${DATAS.indexOf(cur)}"]`).classList.add("is-confirmed");
+  showDone(confirmed[cur.id], true);
+}
+function showDone(c, celebrate){
+  $("#sheetBody").style.display = "none";
+  const first = c.nome.split(" ")[0];
+  $("#doneTitle").textContent = `Tá confirmado, ${first}!`;
+  $("#doneText").textContent = c.pessoas > 1
+    ? `Vou guardar ${c.pessoas} lugares pra vocês no dia ${cur.dia}/10, às ${cur.hora}h.`
+    : `Vou guardar seu lugar no dia ${cur.dia}/10, às ${cur.hora}h.`;
+  $("#gcal").href = gcalUrl(cur);
+  const d = $("#done"); d.classList.remove("show"); void d.offsetWidth; d.classList.add("show");
+  if (celebrate) burst();
+}
+function burst(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c = document.querySelector(".check").getBoundingClientRect();
+  const cx = c.left + c.width/2, cy = c.top + c.height/2;
+  const colors = ["#F0441B","#0E0E0E","#FF9466","#C9C9C5"];
+  for (let i = 0; i < 18; i++){
+    const s = document.createElement("span"); s.className = "burst";
+    s.style.background = colors[i % 4]; s.style.left = cx + "px"; s.style.top = cy + "px";
+    document.body.appendChild(s);
+    const a = (i / 18) * Math.PI * 2, dist = 50 + Math.random() * 50;
+    s.animate([
+      { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
+      { transform: `translate(calc(-50% + ${Math.cos(a)*dist}px), calc(-50% + ${Math.sin(a)*dist}px)) scale(.3)`, opacity: 0 }
+    ], { duration: 800 + Math.random()*300, easing: "cubic-bezier(.22,1,.36,1)" }).onfinish = () => s.remove();
+  }
+}
+
+/* ---- scroll reveal + dock state ---- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target) } }), { threshold: .15 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+const pills = document.querySelectorAll(".pill");
+const secIo = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) pills.forEach(p => p.classList.toggle("on", p.dataset.sec === e.target.id));
+}), { rootMargin: "-45% 0px -50% 0px" });
+document.querySelectorAll("section").forEach(s => secIo.observe(s));
+</script>
+</body>
+</html>
