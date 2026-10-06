@@ -9,6 +9,7 @@
 <meta property="og:description" content="4 datas em outubro. Confirme sua presença até o dia 10!">
 <meta name="theme-color" content="#ECECEA">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23F0441B'/><text x='16' y='23' font-family='Helvetica' font-size='20' font-weight='600' text-anchor='middle' fill='white'>F</text></svg>">
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("anim")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
@@ -60,13 +61,7 @@ section + section{margin-top:44px}
   min-height:188px;padding:12px 12px 14px;
   display:flex;flex-direction:column;justify-content:space-between;
   transition:transform .5s var(--spring),box-shadow .4s var(--ease);
-  opacity:0;translate:0 18px;scale:.98;
 }
-.ready .card{animation:rise .9s var(--ease) forwards}
-.ready .card:nth-child(2){animation-delay:.07s}
-.ready .card:nth-child(3){animation-delay:.14s}
-.ready .card:nth-child(4){animation-delay:.21s}
-@keyframes rise{to{opacity:1;translate:0 0;scale:1}}
 .card:hover{box-shadow:0 10px 30px -14px rgba(0,0,0,.25)}
 .card:active{transform:scale(.975);transition-duration:.15s}
 .card.tall{grid-row:span 2}
@@ -159,20 +154,28 @@ section + section{margin-top:44px}
 .block.orange{background:var(--accent);color:#fff}
 .block.orange p{color:rgba(255,255,255,.92)}
 .block.orange .eyebrow{color:rgba(255,255,255,.7)}
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+/* estados iniciais quando o GSAP vai animar (classe colocada no <head>) */
+.anim h1,.anim .sec-head,.anim .card,.anim .reveal,.anim footer,.anim .dock{visibility:hidden}
+.w{display:inline-block}
+.nw{white-space:nowrap}
 
 footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 
 /* ---------- dock ---------- */
 .dock{
-  position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translate(-50%,140%);
+  position:fixed;left:0;right:0;margin:0 auto;width:max-content;bottom:max(14px,env(safe-area-inset-bottom));
   display:flex;gap:6px;padding:6px;border-radius:99px;
   background:rgba(236,236,234,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
   box-shadow:0 10px 30px -12px rgba(0,0,0,.25);z-index:20;
-  transition:transform .8s var(--spring) .35s;
 }
-.ready .dock,.dock.show{transform:translate(-50%,0)}
+
+/* desfoque progressivo no fim da tela */
+.edge{position:fixed;left:0;right:0;bottom:0;height:120px;pointer-events:none;z-index:15}
+.edge i{position:absolute;inset:0}
+.edge i:nth-child(1){backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);-webkit-mask-image:linear-gradient(transparent,#000 45%);mask-image:linear-gradient(transparent,#000 45%)}
+.edge i:nth-child(2){backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);-webkit-mask-image:linear-gradient(transparent 35%,#000 75%);mask-image:linear-gradient(transparent 35%,#000 75%)}
+.edge i:nth-child(3){backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);-webkit-mask-image:linear-gradient(transparent 65%,#000);mask-image:linear-gradient(transparent 65%,#000)}
+.edge i:nth-child(4){background:linear-gradient(rgba(236,236,234,0),rgba(236,236,234,.55))}
 .pill{
   display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:99px;
   background:#fff;font-size:15px;font-weight:500;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;
@@ -185,34 +188,21 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 /* ---------- overlays ---------- */
 .overlay{
   position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;
-  background:rgba(20,20,18,0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
-  visibility:hidden;transition:background .5s var(--ease),backdrop-filter .5s var(--ease),-webkit-backdrop-filter .5s var(--ease),visibility 0s linear .5s;
+  background:rgba(20,20,18,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  visibility:hidden;
 }
-.overlay.open{visibility:visible;background:rgba(20,20,18,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition-delay:0s}
+.overlay.open{visibility:visible}
 .panel{
   width:100%;max-width:560px;background:var(--bg);
   border-radius:22px 22px 0 0;padding:10px 12px max(16px,env(safe-area-inset-bottom));
-  transform:translateY(105%);transition:transform .6s var(--ease);
   max-height:92dvh;overflow:auto;overscroll-behavior:contain;
 }
-.overlay.open .panel{transform:none;transition:transform .75s var(--spring)}
 @media (min-width:640px){
   .overlay{align-items:center}
-  .panel{border-radius:22px;padding-bottom:16px;transform:translateY(40px) scale(.96);opacity:0;transition:transform .5s var(--ease),opacity .35s}
-  .overlay.open .panel{opacity:1}
+  .panel{border-radius:22px;padding-bottom:16px}
 }
 .handle{width:38px;height:5px;border-radius:9px;background:#C9C9C4;margin:0 auto 10px}
 @media (min-width:640px){.handle{display:none}}
-
-/* stagger children inside panels */
-.stag > *{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-.overlay.open .stag > *{opacity:1;transform:none}
-.overlay.open .stag > *:nth-child(1){transition-delay:.12s}
-.overlay.open .stag > *:nth-child(2){transition-delay:.18s}
-.overlay.open .stag > *:nth-child(3){transition-delay:.24s}
-.overlay.open .stag > *:nth-child(4){transition-delay:.30s}
-.overlay.open .stag > *:nth-child(5){transition-delay:.36s}
-.overlay.open .stag > *:nth-child(6){transition-delay:.42s}
 
 /* intro */
 .intro-art{
@@ -292,20 +282,18 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 .done{display:none;text-align:left}
 .done.show{display:block}
 .done-card{background:#fff;border-radius:14px;padding:16px 14px 20px;margin-top:6px}
-.check{width:56px;height:56px;border-radius:50%;background:var(--accent);display:grid;place-items:center;animation:pop .7s var(--spring)}
-.check path{stroke-dasharray:30;stroke-dashoffset:30;animation:draw .55s var(--ease) .25s forwards}
+.check{width:56px;height:56px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.check path{stroke-dasharray:30;stroke-dashoffset:30}
+.done.show .check path{animation:draw .55s var(--ease) .35s forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 .done-card h3{font-size:clamp(30px,9vw,40px);font-weight:500;letter-spacing:-.05em;line-height:.95;margin-top:22px}
 .done-card p{font-size:16px;line-height:1.4;color:#2a2a28;margin-top:10px}
-.done .btn{animation:rise .7s var(--ease) both .35s;opacity:0;translate:0 12px}
-.done .btn + .btn{animation-delay:.45s}
 
 /* confetti dots */
 .burst{position:fixed;pointer-events:none;z-index:60;width:8px;height:8px;border-radius:50%}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  .card,.reveal,.stag > *{opacity:1!important;transform:none!important;translate:none!important;scale:none!important}
 }
 </style>
 </head>
@@ -313,7 +301,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 
 <main class="app" id="app">
   <header class="top">
-    <h1>Fuente&shy;ovejuna</h1>
+    <h1><span class="nw">Fuente</span>&shy;<span class="nw">ovejuna</span></h1>
   </header>
 
   <section id="datas">
@@ -354,6 +342,8 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 
   <footer>Te espero lá ♥ Vitor Heitor</footer>
 </main>
+
+<div class="edge" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <nav class="dock" id="dock" aria-label="Seções">
   <a class="pill on" href="#datas" data-sec="datas">Datas <span class="badge">4</span></a>
@@ -427,6 +417,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 /* ===== Config — edite aqui ===== */
 const CONFIG = {
@@ -470,15 +461,95 @@ DATAS.forEach((d, i) => {
   grid.appendChild(b);
 });
 
+/* ---- motion (GSAP) ---- */
+const G = window.gsap;
+const MOTION = !!G && document.documentElement.classList.contains("anim");
+if (!MOTION) document.documentElement.classList.remove("anim");
+const isWide = () => matchMedia("(min-width:640px)").matches;
+const shown = el => el.offsetParent !== null;
+
+// Quebra o texto em palavras (ou letras) dentro de spans, mantendo tags como <b>
+function split(el, chars){
+  if (el.querySelector(".w")) return el.querySelectorAll(".w");
+  const walk = node => [...node.childNodes].forEach(n => {
+    if (n.nodeType === 3){
+      const frag = document.createDocumentFragment();
+      const parts = chars ? Array.from(n.textContent) : n.textContent.split(/(\s+)/);
+      parts.forEach(t => {
+        if (!t) return;
+        if (/^[\s­]+$/.test(t)) return frag.appendChild(document.createTextNode(t));
+        const sp = document.createElement("span"); sp.className = "w"; sp.textContent = t; frag.appendChild(sp);
+      });
+      n.replaceWith(frag);
+    } else if (n.nodeType === 1) walk(n);
+  });
+  walk(el);
+  return el.querySelectorAll(".w");
+}
+// Texto surgindo do desfoque, palavra por palavra
+function textIn(el, o = {}){
+  if (!MOTION || !el) return G ? G.timeline() : null;
+  return G.fromTo(split(el, o.chars),
+    { autoAlpha: 0, y: o.chars ? "0.45em" : "0.35em", filter: "blur(8px)" },
+    { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: o.d || .9, ease: "power3.out",
+      stagger: o.s || (o.chars ? .028 : .03), clearProps: "filter,transform" });
+}
+const blurIn = { autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", ease: "expo.out", clearProps: "filter,transform,transition" };
+
+/* ---- page entrance: boxes settle into the grid ---- */
+let entered = false;
+function enterPage(){
+  if (!MOTION || entered) return; entered = true;
+  const cards = [...grid.children];
+  const from = [{x:-36,y:28,r:-4},{x:34,y:-22,r:3},{x:38,y:26,r:3},{x:0,y:46,r:-1.5}];
+  const tl = G.timeline();
+  G.set("h1", { autoAlpha: 1 });
+  tl.add(textIn($("h1"), { chars: true, d: 1.1, s: .03 }), 0)
+    .fromTo("#datas .sec-head", { autoAlpha: 0, y: 10, filter: "blur(6px)" }, { ...blurIn, duration: .8 }, .25)
+    .fromTo(cards,
+      { autoAlpha: 0, x: i => from[i].x, y: i => from[i].y, rotation: i => from[i].r, scale: .86, filter: "blur(12px)", transition: "none" },
+      { ...blurIn, x: 0, rotation: 0, duration: 1.3, stagger: .09 }, .3)
+    .fromTo(cards.map(c => c.querySelector(".card-big")), { autoAlpha: 0, y: 26 },
+      { autoAlpha: 1, y: 0, duration: 1.1, stagger: .09, ease: "expo.out", clearProps: "transform" }, .55)
+    .fromTo("#dock", { autoAlpha: 0, y: 70, scale: .9 },
+      { autoAlpha: 1, y: 0, scale: 1, duration: 1, ease: "back.out(1.5)", clearProps: "transform" }, .85);
+}
+
 /* ---- overlays ---- */
 let openOverlay = null, lastFocus = null;
 function open(el){
-  lastFocus = document.activeElement;
-  el.classList.add("open"); document.body.classList.add("locked"); openOverlay = el;
+  lastFocus = document.activeElement; openOverlay = el;
+  el.classList.add("open"); document.body.classList.add("locked");
+  if (!MOTION) return;
+  const panel = el.querySelector(".panel");
+  const kids = [...el.querySelectorAll(".stag > *, .done.show > *")].filter(shown);
+  G.killTweensOf([el, panel, ...kids]);
+  const tl = G.timeline();
+  tl.fromTo(el, { autoAlpha: 0 }, { autoAlpha: 1, duration: .45, ease: "power2.out" })
+    .fromTo(panel,
+      isWide() ? { y: 50, scale: .94, autoAlpha: 0, filter: "blur(10px)" } : { yPercent: 100 },
+      isWide() ? { ...blurIn, duration: .9 } : { yPercent: 0, duration: .85, ease: "expo.out" }, .05)
+    .fromTo(kids, { autoAlpha: 0, y: 18, filter: "blur(6px)", transition: "none" },
+      { ...blurIn, duration: .75, stagger: .06, ease: "power3.out" }, .15);
+  const h = [...el.querySelectorAll("h2, h3")].find(shown);
+  if (h) tl.add(textIn(h, { s: .045 }), .25);
 }
-function close(el){
-  el.classList.remove("open"); document.body.classList.remove("locked"); openOverlay = null;
-  if (lastFocus) lastFocus.focus({preventScroll:true});
+function close(el, cb){
+  openOverlay = null;
+  const panel = el.querySelector(".panel");
+  const done = () => {
+    el.classList.remove("open"); document.body.classList.remove("locked");
+    if (G) G.set([el, panel], { clearProps: "all" });
+    if (lastFocus) lastFocus.focus({ preventScroll: true });
+    if (cb) cb();
+  };
+  if (!MOTION) return done();
+  G.killTweensOf([el, panel]);
+  G.timeline({ onComplete: done })
+    .to(panel, isWide()
+      ? { y: 30, scale: .96, autoAlpha: 0, filter: "blur(8px)", duration: .4, ease: "power3.in" }
+      : { yPercent: 100, duration: .5, ease: "power3.in" })
+    .to(el, { autoAlpha: 0, duration: .35, ease: "power2.in" }, isWide() ? .1 : .2);
 }
 document.querySelectorAll(".overlay").forEach(o => {
   o.addEventListener("click", e => { if (e.target === o) dismiss(o) });
@@ -489,14 +560,15 @@ function dismiss(o){ o.id === "intro" ? startApp() : close(o) }
 /* ---- intro ---- */
 const intro = $("#intro");
 function startApp(){
-  close(intro);
+  if (openOverlay !== intro) return;
   try{ sessionStorage.setItem("fv_intro","1") }catch(e){}
-  setTimeout(() => document.body.classList.add("ready"), 120);
+  close(intro);
+  setTimeout(enterPage, 220);
 }
 $("#introGo").addEventListener("click", startApp);
 let seen = false; try{ seen = sessionStorage.getItem("fv_intro") }catch(e){}
-if (seen) document.body.classList.add("ready");
-else requestAnimationFrame(() => setTimeout(() => { open(intro); $("#introGo").focus({preventScroll:true}) }, 250));
+if (seen) enterPage();
+else setTimeout(() => { open(intro); $("#introGo").focus({preventScroll:true}) }, 200);
 
 /* ---- sheet ---- */
 const sheet = $("#sheet");
@@ -590,15 +662,27 @@ function submit(){
 }
 if (pending.length) flush();
 function showDone(c, celebrate){
-  $("#sheetBody").style.display = "none";
   const first = c.nome.split(" ")[0];
   $("#doneTitle").textContent = `Tá confirmado, ${first}!`;
   $("#doneText").textContent = c.pessoas > 1
     ? `Vou guardar ${c.pessoas} lugares pra vocês no dia ${cur.dia}/10, às ${cur.hora}h.`
     : `Vou guardar seu lugar no dia ${cur.dia}/10, às ${cur.hora}h.`;
   $("#gcal").href = gcalUrl(cur);
-  const d = $("#done"); d.classList.remove("show"); void d.offsetWidth; d.classList.add("show");
-  if (celebrate) burst();
+  const body = $("#sheetBody"), d = $("#done"), panel = sheet.querySelector(".panel");
+  const swap = () => { body.style.display = "none"; d.classList.remove("show"); void d.offsetWidth; d.classList.add("show") };
+  if (!MOTION || !celebrate){ swap(); if (celebrate) burst(); return }
+  const h0 = panel.offsetHeight;
+  G.to([...body.children], { autoAlpha: 0, y: -12, filter: "blur(8px)", duration: .32, stagger: .03, ease: "power2.in", onComplete(){
+    swap(); G.set([...body.children], { clearProps: "all" });
+    const h1 = panel.offsetHeight;
+    G.timeline()
+      .fromTo(panel, { height: h0 }, { height: h1, duration: .65, ease: "expo.out", clearProps: "height" })
+      .fromTo([...d.children], { autoAlpha: 0, y: 24, filter: "blur(8px)", transition: "none" },
+        { ...blurIn, duration: .8, stagger: .08, ease: "power3.out" }, .05)
+      .fromTo(".check", { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 1, ease: "elastic.out(1,.55)", clearProps: "transform" }, .1)
+      .add(textIn($("#doneTitle"), { s: .05 }), .15)
+      .call(burst, null, .3);
+  }});
 }
 function burst(){
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -617,9 +701,17 @@ function burst(){
   }
 }
 
-/* ---- scroll reveal + dock state ---- */
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target) } }), { threshold: .15 });
-document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+/* ---- scroll reveal: blocos e textos saem do desfoque ---- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  io.unobserve(e.target);
+  const tl = G.timeline();
+  tl.fromTo(e.target, { autoAlpha: 0, y: 36, scale: .97, filter: "blur(12px)" }, { ...blurIn, duration: 1.2 });
+  e.target.querySelectorAll("h2, q").forEach(h => tl.add(textIn(h, { s: .035 }), .1));
+  if (e.target.tagName === "FOOTER") tl.add(textIn(e.target, { s: .08, d: 1.2 }), 0);
+}), { threshold: .15, rootMargin: "0px 0px -6% 0px" });
+if (MOTION) document.querySelectorAll(".reveal, #peca .sec-head, #mengo .sec-head, footer").forEach(el => io.observe(el));
+
 const pills = document.querySelectorAll(".pill");
 const secIo = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) pills.forEach(p => p.classList.toggle("on", p.dataset.sec === e.target.id));
