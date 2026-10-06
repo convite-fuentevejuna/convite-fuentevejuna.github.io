@@ -101,13 +101,18 @@ section + section{margin-top:44px}
   filter:blur(18px);animation:drift 14s ease-in-out infinite alternate;
 }
 
-/* anéis: ondas concêntricas finas */
-.card.rings{
+/* brilho: luz difusa vindo de baixo */
+.card.glow{
   background:
-    radial-gradient(130% 90% at 0% 110%, var(--c3), transparent 65%),
-    repeating-radial-gradient(circle at 115% -15%, color-mix(in srgb, var(--c2) 78%, white) 0 2px, var(--c2) 2px 14px);
+    radial-gradient(90% 55% at 15% 105%, var(--c1) 0 14%, transparent 60%),
+    radial-gradient(70% 45% at 105% 10%, var(--c3) 0 20%, transparent 70%),
+    linear-gradient(200deg, var(--c3) 0%, var(--c2) 50%, var(--c1) 120%);
 }
-.card.rings::after{inset:0;background:radial-gradient(80% 60% at 100% 0%, rgba(255,255,255,.22), transparent 70%)}
+.card.glow::before{
+  inset:-25%;
+  background:conic-gradient(from 20deg at 35% 60%, transparent 0deg, rgba(255,255,255,.35) 50deg, transparent 110deg, rgba(0,0,0,.25) 200deg, transparent 280deg);
+  filter:blur(20px);animation:drift 16s ease-in-out infinite alternate-reverse;
+}
 
 /* dobras: faixas diagonais desfocadas, como tecido */
 .card.folds{background:linear-gradient(160deg, var(--c1), var(--c2) 45%, var(--c3))}
@@ -117,13 +122,13 @@ section + section{margin-top:44px}
   filter:blur(7px);animation:drift 18s ease-in-out infinite alternate;
 }
 
-/* nervuras: tecido canelado */
-.card.ribbed{
-  background:
-    linear-gradient(115deg, rgba(255,255,255,.14), rgba(0,0,0,.2)),
-    repeating-linear-gradient(98deg, var(--c2) 0 7px, var(--c3) 7px 9px, color-mix(in srgb, var(--c2) 82%, white) 9px 15px);
+/* onda: faixas largas desfocadas, quase horizontais */
+.card.wave{background:linear-gradient(100deg, var(--c3), var(--c2) 50%, var(--c1) 130%)}
+.card.wave::before{
+  inset:-40%;
+  background:repeating-linear-gradient(70deg, transparent 0 40px, rgba(255,255,255,.26) 60px, transparent 80px, rgba(0,0,0,.22) 100px, transparent 120px);
+  filter:blur(10px);animation:drift 20s ease-in-out infinite alternate;
 }
-.card.ribbed::after{inset:0;background:radial-gradient(80% 120% at 85% 110%, rgba(0,0,0,.3), transparent 60%)}
 
 @keyframes drift{from{transform:rotate(-6deg) scale(1)}to{transform:rotate(8deg) scale(1.08)}}
 .confirmed-tag{
@@ -435,9 +440,9 @@ const CONFIG = {
 };
 const DATAS = [
   { id: "16/10", dia: 16, semana: "Sexta-feira",  curto: "Sexta",  hora: 19, estilo: "tex orange silk tall" },
-  { id: "17/10", dia: 17, semana: "Sábado",       curto: "Sábado", hora: 18, estilo: "tex green rings" },
+  { id: "17/10", dia: 17, semana: "Sábado",       curto: "Sábado", hora: 18, estilo: "tex green glow" },
   { id: "20/10", dia: 20, semana: "Terça-feira",  curto: "Terça",  hora: 19, estilo: "tex blue folds" },
-  { id: "24/10", dia: 24, semana: "Sábado",       curto: "Sábado", hora: 19, estilo: "tex purple ribbed wide" },
+  { id: "24/10", dia: 24, semana: "Sábado",       curto: "Sábado", hora: 19, estilo: "tex purple wave wide" },
 ];
 const ANO = 2026;
 /* =============================== */
