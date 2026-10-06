@@ -44,13 +44,7 @@ a{color:inherit}
 /* ---------- header ---------- */
 .top{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 6px 22px}
 .eyebrow{font-size:13px;line-height:1.25;color:var(--muted);letter-spacing:-.005em}
-h1{font-size:clamp(46px,14vw,72px);font-weight:500;letter-spacing:-.055em;line-height:.92;margin-top:10px}
-.round{
-  width:48px;height:48px;border-radius:50%;background:#DDDDD9;display:grid;place-items:center;
-  flex-shrink:0;transition:transform .4s var(--spring),background .3s;
-}
-.round:hover{background:#D2D2CD}
-.round:active{transform:scale(.9)}
+h1{font-size:clamp(46px,14vw,72px);font-weight:500;letter-spacing:-.055em;line-height:.92}
 
 /* ---------- section heads ---------- */
 .sec-head{display:flex;justify-content:space-between;align-items:baseline;padding:0 6px 10px;font-size:13px;color:var(--muted)}
@@ -251,7 +245,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 .field{display:block}
 .field span{font-size:13px;color:var(--muted)}
 .field input{
-  width:100%;border:0;border-bottom:1px solid var(--line);padding:8px 0 10px;margin-top:2px;
+  width:100%;border:0;border-bottom:1px solid var(--line);padding:4px 0 10px;
   font-size:22px;font-weight:500;letter-spacing:-.03em;outline:none;background:transparent;border-radius:0;
   transition:border-color .3s;
 }
@@ -294,13 +288,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 
 <main class="app" id="app">
   <header class="top">
-    <div>
-      <p class="eyebrow">Convite · Outubro<br>Lope de Vega, 1619</p>
-      <h1>Fuente&shy;ovejuna</h1>
-    </div>
-    <button class="round" id="infoBtn" aria-label="Rever o convite">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 6h9M15 6h2M3 14h2M8 14h9"/><circle cx="13.5" cy="6" r="1.6"/><circle cx="6.5" cy="14" r="1.6"/></svg>
-    </button>
+    <h1>Fuente&shy;ovejuna</h1>
   </header>
 
   <section id="datas">
@@ -331,11 +319,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
     <article class="block orange reveal">
       <p class="eyebrow">Camponês de Fuenteovejuna</p>
       <h2>Mengo</h2>
-      <p>O filósofo de botequim da vila. Mengo jura que o amor não existe: para ele, tudo o que existe é amor-próprio. Gosta de um bom vinho, de uma boa discussão e de tirar sarro de tudo.</p>
-    </article>
-    <article class="block reveal">
-      <p>Mas, quando os soldados do Comendador tentam levar Jacinta à força, é ele quem fica. Desarmado, encara os soldados dizendo que tem “a melhor arma do mundo: coragem”. E paga caro por isso.</p>
-      <p>Mengo é o riso e o nervo da peça: o mais fraco da vila, que ninguém espera que aguente. E que, quando o juiz aperta, gagueja… e responde como todos: <b>Fuenteovejuna.</b></p>
+      <p>Mengo é o personagem de Vitor Heitor: o filósofo de botequim da vila, que jura que o amor não existe (só o amor-próprio) e não dispensa um bom vinho. Mas, quando os soldados do Comendador tentam levar Jacinta à força, é ele quem fica e enfrenta todos, desarmado. E, quando o juiz aperta, gagueja… e responde como todos: <b>Fuenteovejuna.</b></p>
     </article>
     <div class="quote reveal">
       <q>Tenho a melhor arma do mundo: coragem.</q>
@@ -388,8 +372,8 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
         <div class="full"><dt>Local</dt><dd id="sPlace"></dd><a id="sMap" target="_blank" rel="noopener">Abrir no mapa ↗</a></div>
       </dl>
       <form class="form" id="form" novalidate>
-        <label class="field"><span>Seu nome</span>
-          <input id="name" name="nome" autocomplete="name" placeholder="Como te chamo?" maxlength="80" required>
+        <label class="field">
+          <input id="name" name="nome" autocomplete="name" placeholder="Seu nome" aria-label="Seu nome" maxlength="80" required>
         </label>
         <div class="stepper">
           <span>Quantas pessoas<br>(contando você)</span>
@@ -423,8 +407,9 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 const CONFIG = {
   // URL do Web App do Google Apps Script (planilha de confirmações)
   scriptUrl: "https://script.google.com/macros/s/AKfycbw2-Pc-waSQAqcJBQGIYs-gViat5qOjTt71qPeS53k4I139H7ZNxE04aDgAjL3CH-FB/exec",
-  local: "Local a confirmar",
-  endereco: "",
+  local: "Sesc Prainha",
+  endereco: "Tv. Siríaco Atherino, 100 - Centro, Florianópolis - SC, 88020-183",
+  mapa: "https://maps.app.goo.gl/vZhTexc3EiP266Q99",
   duracaoHoras: 2,
   prazo: "10/10",
 };
@@ -484,7 +469,6 @@ function startApp(){
   setTimeout(() => document.body.classList.add("ready"), 120);
 }
 $("#introGo").addEventListener("click", startApp);
-$("#infoBtn").addEventListener("click", () => open(intro));
 let seen = false; try{ seen = sessionStorage.getItem("fv_intro") }catch(e){}
 if (seen) document.body.classList.add("ready");
 else requestAnimationFrame(() => setTimeout(() => { open(intro); $("#introGo").focus({preventScroll:true}) }, 250));
@@ -493,7 +477,7 @@ else requestAnimationFrame(() => setTimeout(() => { open(intro); $("#introGo").f
 const sheet = $("#sheet");
 let cur = null, qty = 1;
 function pad(n){ return String(n).padStart(2,"0") }
-function mapUrl(){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([CONFIG.local, CONFIG.endereco].filter(Boolean).join(", ")) }
+function mapUrl(){ return CONFIG.mapa || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([CONFIG.local, CONFIG.endereco].filter(Boolean).join(", ")) }
 function gcalUrl(d){
   const start = `${ANO}10${pad(d.dia)}T${pad(d.hora)}0000`;
   const end = `${ANO}10${pad(d.dia)}T${pad(d.hora + CONFIG.duracaoHoras)}0000`;
@@ -543,25 +527,43 @@ function fail(msg){
 }
 $("#confirm").addEventListener("click", submit);
 
-async function submit(){
+/* Envio otimista: a confirmação aparece na hora e o envio para a planilha
+   roda em segundo plano, com novas tentativas. Envios que não chegaram
+   ficam guardados e são reenviados na próxima visita. */
+const pending = store.get("fv_pending") || [];
+function savePending(){ store.set("fv_pending", pending) }
+async function send(payload, tries = 4){
+  for (let t = 0; t < tries; t++){
+    try{
+      const r = await fetch(CONFIG.scriptUrl, { method: "POST", body: JSON.stringify(payload), keepalive: true });
+      const j = await r.json();
+      if (j.ok) return true;
+      if (j.error === "dados inválidos") return true; // não adianta tentar de novo
+    }catch(e){}
+    await new Promise(r => setTimeout(r, 1500 * (t + 1)));
+  }
+  return false;
+}
+async function flush(){
+  for (const p of pending.slice()){
+    if (await send(p)){ pending.splice(pending.indexOf(p), 1); savePending() }
+  }
+}
+function submit(){
   const nome = $("#name").value.trim();
   if (nome.length < 2){ fail("Escreve seu nome pra eu saber quem vem 🙂"); $("#name").focus(); return }
   const b = $("#confirm"); b.disabled = true; b.classList.add("loading"); b.querySelector(".lbl").textContent = "Confirmando…";
-  const payload = { nome, pessoas: qty, data: cur.id };
-  try{
-    if (!CONFIG.scriptUrl) throw new Error("sem url");
-    const r = await fetch(CONFIG.scriptUrl, { method: "POST", body: JSON.stringify(payload) });
-    const j = await r.json();
-    if (!j.ok) throw new Error(j.error || "erro");
-  }catch(err){
-    resetBtn(); fail("Não consegui confirmar agora. Tenta de novo em instantes?"); return;
-  }
+  const payload = { nome, pessoas: qty, data: cur.id, id: Date.now() + Math.random().toString(36).slice(2, 7) };
+  pending.push(payload); savePending(); flush();
   store.set("fv_name", nome);
   confirmed[cur.id] = { nome, pessoas: qty };
   store.set("fv_confirmed", confirmed);
-  grid.querySelector(`[data-i="${DATAS.indexOf(cur)}"]`).classList.add("is-confirmed");
-  showDone(confirmed[cur.id], true);
+  setTimeout(() => {
+    grid.querySelector(`[data-i="${DATAS.indexOf(cur)}"]`).classList.add("is-confirmed");
+    showDone(confirmed[cur.id], true);
+  }, 450);
 }
+if (pending.length) flush();
 function showDone(c, celebrate){
   $("#sheetBody").style.display = "none";
   const first = c.nome.split(" ")[0];
