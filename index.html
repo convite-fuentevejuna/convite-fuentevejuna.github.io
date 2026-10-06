@@ -91,8 +91,10 @@ section + section{margin-top:44px}
 }
 .card.silk::before{
   inset:-20%;
-  background:conic-gradient(from 200deg at 60% 55%, transparent 0deg, rgba(255,255,255,.4) 40deg, transparent 95deg, rgba(0,0,0,.22) 180deg, transparent 260deg);
-  filter:blur(18px);animation:drift 14s ease-in-out infinite alternate;
+  background:
+    radial-gradient(40% 30% at 65% 42%, rgba(255,255,255,.38), transparent 70%),
+    radial-gradient(45% 35% at 30% 76%, rgba(0,0,0,.2), transparent 70%);
+  animation:drift 14s ease-in-out infinite alternate;
 }
 
 /* brilho: luz difusa vindo de baixo */
@@ -104,24 +106,26 @@ section + section{margin-top:44px}
 }
 .card.glow::before{
   inset:-25%;
-  background:conic-gradient(from 20deg at 35% 60%, transparent 0deg, rgba(255,255,255,.35) 50deg, transparent 110deg, rgba(0,0,0,.25) 200deg, transparent 280deg);
-  filter:blur(20px);animation:drift 16s ease-in-out infinite alternate-reverse;
+  background:
+    radial-gradient(45% 35% at 35% 62%, rgba(255,255,255,.32), transparent 70%),
+    radial-gradient(50% 40% at 75% 25%, rgba(0,0,0,.22), transparent 70%);
+  animation:drift 16s ease-in-out infinite alternate-reverse;
 }
 
 /* dobras: faixas diagonais desfocadas, como tecido */
 .card.folds{background:linear-gradient(160deg, var(--c1), var(--c2) 45%, var(--c3))}
 .card.folds::before{
   inset:-30%;
-  background:repeating-linear-gradient(125deg, transparent 0 34px, rgba(255,255,255,.28) 48px, transparent 62px, rgba(0,0,0,.2) 80px, transparent 96px);
-  filter:blur(7px);animation:drift 18s ease-in-out infinite alternate;
+  background:repeating-linear-gradient(125deg, rgba(255,255,255,0) 0, rgba(255,255,255,.22) 26px, rgba(255,255,255,0) 52px, rgba(0,0,0,.16) 76px, rgba(0,0,0,0) 100px);
+  animation:drift 18s ease-in-out infinite alternate;
 }
 
 /* onda: faixas largas desfocadas, quase horizontais */
 .card.wave{background:linear-gradient(100deg, var(--c3), var(--c2) 50%, var(--c1) 130%)}
 .card.wave::before{
   inset:-40%;
-  background:repeating-linear-gradient(70deg, transparent 0 40px, rgba(255,255,255,.26) 60px, transparent 80px, rgba(0,0,0,.22) 100px, transparent 120px);
-  filter:blur(10px);animation:drift 20s ease-in-out infinite alternate;
+  background:repeating-linear-gradient(70deg, rgba(255,255,255,0) 0, rgba(255,255,255,.22) 32px, rgba(255,255,255,0) 64px, rgba(0,0,0,.18) 94px, rgba(0,0,0,0) 124px);
+  animation:drift 20s ease-in-out infinite alternate;
 }
 
 @keyframes drift{from{transform:rotate(-6deg) scale(1)}to{transform:rotate(8deg) scale(1.08)}}
@@ -164,17 +168,13 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 .dock{
   position:fixed;left:0;right:0;margin:0 auto;width:max-content;bottom:max(14px,env(safe-area-inset-bottom));
   display:flex;gap:6px;padding:6px;border-radius:99px;
-  background:rgba(236,236,234,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  background:rgba(236,236,234,.94);
   box-shadow:0 10px 30px -12px rgba(0,0,0,.25);z-index:20;
 }
 
-/* desfoque progressivo no fim da tela */
-.edge{position:fixed;left:0;right:0;bottom:0;height:120px;pointer-events:none;z-index:15}
-.edge i{position:absolute;inset:0}
-.edge i:nth-child(1){backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);-webkit-mask-image:linear-gradient(transparent,#000 45%);mask-image:linear-gradient(transparent,#000 45%)}
-.edge i:nth-child(2){backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);-webkit-mask-image:linear-gradient(transparent 35%,#000 75%);mask-image:linear-gradient(transparent 35%,#000 75%)}
-.edge i:nth-child(3){backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);-webkit-mask-image:linear-gradient(transparent 65%,#000);mask-image:linear-gradient(transparent 65%,#000)}
-.edge i:nth-child(4){background:linear-gradient(rgba(236,236,234,0),rgba(236,236,234,.55))}
+/* esmaecido no fim da tela (degradê simples: blur ao vivo fazia a tela piscar no iPhone) */
+.edge{position:fixed;left:0;right:0;bottom:0;height:110px;pointer-events:none;z-index:15;
+  background:linear-gradient(rgba(236,236,234,0),rgba(236,236,234,.75) 60%,rgba(236,236,234,.95))}
 .pill{
   display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:99px;
   background:#fff;font-size:15px;font-weight:500;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;
@@ -219,8 +219,8 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 }
 .intro-art::before{
   content:"";position:absolute;inset:-30%;
-  background:conic-gradient(from 120deg at 55% 50%, transparent 0 30deg, rgba(255,210,180,.5) 70deg, transparent 120deg, rgba(110,15,0,.3) 220deg, transparent 300deg);
-  filter:blur(22px);animation:drift 10s ease-in-out infinite alternate;
+  background:radial-gradient(40% 35% at 60% 45%, rgba(255,215,190,.45), transparent 70%), radial-gradient(45% 40% at 30% 75%, rgba(110,15,0,.25), transparent 70%);
+  animation:drift 10s ease-in-out infinite alternate;
 }
 .intro-art span{position:relative;font-size:13px;opacity:.85}
 .intro-card{background:#fff;border-radius:14px;padding:18px 16px 18px;margin-top:6px}
@@ -347,7 +347,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
   <footer>Te espero lá ♥ Vitor Heitor</footer>
 </main>
 
-<div class="edge" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="edge" aria-hidden="true"></div>
 
 <nav class="dock" id="dock" aria-label="Seções">
   <a class="pill on" href="#datas" data-sec="datas">Datas <span class="badge">4</span></a>
