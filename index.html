@@ -192,7 +192,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 0 10px}
 /* fundo escuro dos pop-ups: sem backdrop-filter, porque no Safari do iPhone animar um
    fundo desfocado junto com o painel faz partes do painel sumirem/piscarem */
 .scrim{position:absolute;inset:0;background:rgba(18,18,16,.42)}
-.panel{will-change:transform}
 /* enquanto um pop-up está aberto, as texturas animadas das datas ficam paradas */
 .modal .card.tex::before{animation-play-state:paused}
 .overlay.open{visibility:visible}
@@ -533,7 +532,8 @@ function open(el){
   if (!MOTION) return;
   const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const kids = [...el.querySelectorAll(".stag > *, .done.show > *")].filter(shown);
-  G.killTweensOf([scrim, panel, ...kids]);
+  G.killTweensOf([el, scrim, panel, ...kids]);
+  G.set(el, { clearProps: "opacity,visibility" });
   const tl = G.timeline();
   tl.fromTo(scrim, { autoAlpha: 0 }, { autoAlpha: 1, duration: .45, ease: "power2.out" })
     .fromTo(panel,
@@ -549,18 +549,16 @@ function close(el, cb){
   const panel = el.querySelector(".panel"), scrim = el.querySelector(".scrim");
   const done = () => {
     el.classList.remove("open"); document.documentElement.classList.remove("modal");
-    if (G) G.set([scrim, panel], { clearProps: "all" });
+    if (G) G.set([el, scrim, panel], { clearProps: "all" });
     // no celular, devolver o foco pode rolar a página sozinho; só no computador
     if (lastFocus && matchMedia("(hover: hover)").matches) lastFocus.focus({ preventScroll: true });
     if (cb) cb();
   };
   if (!MOTION) return done();
-  G.killTweensOf([scrim, panel]);
-  G.timeline({ onComplete: done })
-    .to(panel, RM ? { autoAlpha: 0, duration: .3 } : isWide()
-      ? { y: 30, scale: .96, autoAlpha: 0, duration: .4, ease: "power3.in" }
-      : { yPercent: 100, duration: .5, ease: "power3.in" })
-    .to(scrim, { autoAlpha: 0, duration: .35, ease: "power2.in" }, isWide() ? .1 : .2);
+  // Fechar = um único fade do pop-up inteiro, sem mover nada. Mover o painel fazia
+  // o iPhone mostrar pedaços sem pintar (pisca) no meio da animação.
+  G.killTweensOf([el, scrim, panel]);
+  G.to(el, { autoAlpha: 0, duration: .26, ease: "power1.out", onComplete: done });
 }
 document.querySelectorAll(".overlay").forEach(o => {
   const scrim = o.querySelector(".scrim");
